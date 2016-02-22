@@ -1,0 +1,60 @@
+## Recodificar y etiquetar
+require(foreign)
+sdemt215<- read.dbf("C:\\Users\\EDITH VELAZQUEZ\\Desktop\\SDEMT215.dbf")
+
+help(str)
+str(sdemt215)
+attach(sdemt215)
+table(SEX)
+table(EDA)
+EDA1 <- as.numeric (as.character(EDA))## CAMBIA NUMERICO
+table(EDA1)
+library()
+install.packages("memisc")
+install.packages("MASS") #YA LO TENGO INSTALADO
+library(memisc)
+library(car)
+gedad <- recode(EDA1, '1:4 = 2 ; 5:95 = 1') ## RECODIFICANDOUN RANGO
+table(gedad)
+#rm (gedad)
+
+### PONDERAR CASOS
+install.packages("questionr")
+require(questionr)
+c1<- wtd.table(sdemt215$SEX, weights = sdemt215$FAC)
+table(c1)
+write.csv(c1,file="C:\\Users\\EDITH VELAZQUEZ\\Desktop\\PEA.csv")
+write.csv(c1)
+c1
+c0<- table(sdemt215$SEX)
+c0
+## OBTIENE LA TABLA EXPANDIDA CON LAS NUEVAS ETIQUETAS DE CLASE1. EMPLEA LA VARIABLE FAC(FACTOR DE EXPANSION)
+## SE ASIGNA A UNA VARIABLE PARA PODER EXPORTARLA
+
+###  P O R C E N T A J E S ###
+tabrama<- wtd.table(sdemt215$SEX, weights = sdemt215$FAC)
+c1.1<- round ((tabrama/margin.table(tabrama))*100, 2)
+write.csv(c1.1,file="C:\\Users\\EDITH VELAZQUEZ\\Desktop\\PEA1.csv")
+c1.1
+# OBTIENE LAS TABLAS CON NUMEROS RELATIVOS
+
+### OCUPADOS Y NO OCUPADOS
+
+sdemt215$SEX<- ordered(sdemt215$SEX,levels=c(1,2), labels=c("Hombres","Mujeres"))
+#Obtiene la variable CLASE2 (Poblacion ocupada y no ocupada) a la cual asigna etiquetas a los niveles
+c2<- wtd.table(sdemt215$SEX, weights = sdemt215$FAC)
+write.csv(c2,file="C:\\Users\\EDITH VELAZQUEZ\\Desktop\\ocupados.csv")
+c2
+View (sdemt215$SEX)
+
+# EJERCICIO CLASE. ETIQUETEN LA VARIABLE NAC_MES##
+NAC_MES <- as.numeric (as.character(sdemt215$NAC_MES))## CAMBIA NUMERICO
+is.numeric(sdemt215$NAC_MES)
+sdemt215$NAC_MES<- ordered(sdemt215$NAC_MES,levels=c("01","02","03","04","05","06","07","08","09",10,11,12,99), labels=c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre","NA"))
+#Obtiene la variable CLASE3 (Mes de nacimiento) a la cual asigna etiquetas a los niveles
+c3<- wtd.table(sdemt215$NAC_MES, weights = sdemt215$FAC)
+write.csv(c3,file="C:\\Users\\EDITH VELAZQUEZ\\Desktop\\nacmes.csv")
+c3
+View (sdemt215$NAC_MES)
+View(sdemt215)
+getwd()
